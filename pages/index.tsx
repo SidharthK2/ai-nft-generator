@@ -1,8 +1,11 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useAccount, useConnect, useEnsName } from "wagmi";
 
 const Home: NextPage = () => {
+  const { address, isConnected } = useAccount();
+
   return (
     <div>
       <Head>
@@ -12,13 +15,16 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <div>Hi There!</div>
+        <div className="text-blue-500">Hi {address || "fren"}</div>
         <ConnectButton />
       </main>
 
       <footer>
-        <a href="https://rainbow.me" rel="noopener noreferrer" target="_blank">
-          Made with ❤️ by your frens at 🌈
+        <a
+          href="https://github.com/SidharthK2"
+          rel="noopener noreferrer"
+          target="_blank">
+          © 2023 SidharthK2
         </a>
       </footer>
     </div>
