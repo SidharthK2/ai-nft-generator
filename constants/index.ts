@@ -1,0 +1,1 @@
+export {abi, address} from "./AiToken"
