@@ -24,7 +24,7 @@ const Home: NextPage = () => {
         />
       </Head>
 
-      <main className=" min-h-screen">
+      <main className=" min-h-screen min-w-full">
         <Header />
         <RollingImages />
         <ImageGenerationSection />
