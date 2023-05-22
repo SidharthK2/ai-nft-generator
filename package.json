@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/font": "^13.4.3",
     "@rainbow-me/rainbowkit": "^1.0.0",
     "axios": "^1.4.0",
     "axios-retry": "^3.5.0",

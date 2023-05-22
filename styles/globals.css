@@ -9,3 +9,11 @@
 .shantellFont {
   font-family: "Shantell Sans", cursive;
 }
+
+@layer base {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+}
