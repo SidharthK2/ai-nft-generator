@@ -8,7 +8,7 @@ const Home: NextPage = () => {
       <Head>
         <title>AI NFT Generator App</title>
         <meta content="Generate custom NFTs using AI" name="description" />
-        <link href="/favicon.ico" rel="icon" />
+        <link href="/ape.png" rel="icon" />
       </Head>
 
       <main>
