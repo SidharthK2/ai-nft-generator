@@ -7,6 +7,7 @@ import {
   useContractWrite,
   usePrepareContractWrite,
   useContractRead,
+  useWaitForTransaction,
 } from "wagmi";
 
 interface ModalProps {
@@ -22,10 +23,14 @@ export const Modal: FC<ModalProps> = ({ isOpen, onClose, url }) => {
 
   const { address: userAddress } = useAccount();
 
-  const { data, isLoading, isSuccess, write } = useContractWrite({
+  const { data, write } = useContractWrite({
     address: address,
     abi: abi,
     functionName: "safeMint",
+  });
+
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
   });
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,10 +71,10 @@ export const Modal: FC<ModalProps> = ({ isOpen, onClose, url }) => {
         args: [userAddress, tokenUri],
       });
     }
-    setIsMinting(isLoading);
+    setIsMinting(false);
   };
 
-  return !isSuccess && !isLoading ? (
+  return !isSuccess ? (
     <div
       className={`fixed inset-0 flex items-center justify-center z-50 ${
         isOpen ? "visible" : "invisible"
