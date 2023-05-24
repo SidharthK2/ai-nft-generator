@@ -460,5 +460,5 @@ export const abi = [
       "stateMutability": "nonpayable",
       "type": "function"
     }
-  ]
-export const address = "0x4dBfd649bBd0E5e1bB25D7946Eb29EB20d9a242e"
+  ] as const
+export const address = "0x4dBfd649bBd0E5e1bB25D7946Eb29EB20d9a242e" as const

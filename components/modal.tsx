@@ -1,5 +1,13 @@
 import React, { FC, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { abi, address } from "../constants";
+import {
+  useAccount,
+  useContractWrite,
+  usePrepareContractWrite,
+  useContractRead,
+} from "wagmi";
 
 interface ModalProps {
   isOpen: boolean;
@@ -11,6 +19,14 @@ export const Modal: FC<ModalProps> = ({ isOpen, onClose, url }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [isMinting, setIsMinting] = useState(false);
+
+  const { address: userAddress } = useAccount();
+
+  const { data, isLoading, isSuccess, write } = useContractWrite({
+    address: address,
+    abi: abi,
+    functionName: "safeMint",
+  });
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -31,23 +47,29 @@ export const Modal: FC<ModalProps> = ({ isOpen, onClose, url }) => {
       method: "POST",
       body: JSON.stringify(url),
     });
-    const { IpfsHash } = await response.json();
+    const { IpfsHash: imgHash } = await response.json();
     const metadata = {
-      url: `ipfs://${IpfsHash}`,
+      url: `ipfs://${imgHash}`,
       name,
       description,
     };
-    console.dir(metadata);
     const pinRes = await fetch("/api/uploadMetadata", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(metadata),
     });
-    const pinData = await pinRes.json();
-    console.log("mtdta: ", pinData);
+    const { IpfsHash: metadataHash } = await pinRes.json();
+    const tokenUri = `ipfs://${metadataHash}`;
+    console.log(tokenUri);
+    if (userAddress) {
+      write({
+        args: [userAddress, tokenUri],
+      });
+    }
+    setIsMinting(isLoading);
   };
 
-  return (
+  return !isSuccess && !isLoading ? (
     <div
       className={`fixed inset-0 flex items-center justify-center z-50 ${
         isOpen ? "visible" : "invisible"
@@ -83,13 +105,12 @@ export const Modal: FC<ModalProps> = ({ isOpen, onClose, url }) => {
             />
           </div>
           <button
-            disabled={isMinting}
+            disabled={isMinting || !write}
             type="submit"
             className="disabled:opacity-50 enabled:active:scale-95 enabled:hover:bg-opacity-80 text-xl px-4 py-2 bg-blue-500 text-white rounded">
             {isMinting ? "Minting..." : "Mint"}
           </button>
-          {/* *** {CHANGE 1 TO IS MINTING BEFORE PUSH}*** */}
-          {1 && (
+          {!isMinting && (
             <button
               className="active:scale-95 hover:opacity-80 px-4 py-2 bg-red-500 text-white rounded ml-2"
               onClick={onClose}>
@@ -97,6 +118,30 @@ export const Modal: FC<ModalProps> = ({ isOpen, onClose, url }) => {
             </button>
           )}
         </form>
+      </div>
+    </div>
+  ) : (
+    <div
+      className={`fixed inset-0 flex items-center justify-center z-50 ${
+        isOpen ? "visible" : "invisible"
+      }`}>
+      <div className="space-y-2 outline-2 outline bg-gradient-to-r from-sky-400 to-cyan-300 p-6 rounded shadow-lg">
+        <h2 className="text-3xl mb-4">NFT Minted!! 🎉🎉</h2>
+        <img
+          className="rounded-lg outline outline-2"
+          src={url}
+          alt="selected nft"
+        />
+        <Link href={`https://testnets.opensea.io/collection/aitoken-1`}>
+          {"Click to view your NFT!! 🔥🔥"}
+        </Link>
+        {!isMinting && (
+          <button
+            className=" active:scale-95 hover:opacity-80 px-4 py-2 bg-red-500 text-white rounded ml-2"
+            onClick={onClose}>
+            Close
+          </button>
+        )}
       </div>
     </div>
   );

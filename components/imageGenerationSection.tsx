@@ -27,7 +27,7 @@ export const ImageGenerationSection = () => {
         }),
       });
       const data = await response.json();
-      console.log(data);
+
       setImages(data);
       console.log(images);
       setLoading(false);
@@ -103,9 +103,9 @@ export const ImageGenerationSection = () => {
           </button>
         </div>
       </form>
-      {images && !loading ? (
+      {images && !loading && (
         <div className="flex gap-4 my-4">
-          {images.map((img: any, i: number) => {
+          {images?.map((img: any, i: number) => {
             return (
               <div key={i}>
                 <img
@@ -117,8 +117,6 @@ export const ImageGenerationSection = () => {
           })}
           <Modal isOpen={modalOpen} onClose={closeModal} url={selectedImage} />
         </div>
-      ) : (
-        <></>
       )}
     </div>
   );
