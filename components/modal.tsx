@@ -10,6 +10,7 @@ interface ModalProps {
 export const Modal: FC<ModalProps> = ({ isOpen, onClose, url }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [isMinting, setIsMinting] = useState(false);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -19,10 +20,31 @@ export const Modal: FC<ModalProps> = ({ isOpen, onClose, url }) => {
     setDescription(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("name:", name);
-    console.log("desc:", description);
+    if (!name || !description || !url) {
+      alert("Please ensure all fields are filled!");
+      return 0;
+    }
+    setIsMinting(true);
+    const response = await fetch("/api/uploadImage", {
+      method: "POST",
+      body: JSON.stringify(url),
+    });
+    const { IpfsHash } = await response.json();
+    const metadata = {
+      url: `ipfs://${IpfsHash}`,
+      name,
+      description,
+    };
+    console.dir(metadata);
+    const pinRes = await fetch("/api/uploadMetadata", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(metadata),
+    });
+    const pinData = await pinRes.json();
+    console.log("mtdta: ", pinData);
   };
 
   return (
@@ -31,7 +53,7 @@ export const Modal: FC<ModalProps> = ({ isOpen, onClose, url }) => {
         isOpen ? "visible" : "invisible"
       }`}>
       <div className="space-y-2 outline-2 outline bg-gradient-to-r from-sky-400 to-cyan-300 p-6 rounded shadow-lg">
-        <h2 className="text-2xl font-bold mb-4">Let's Mint!</h2>
+        <h2 className="text-3xl mb-4">Let's Mint!</h2>
         <img
           className="rounded-lg outline outline-2"
           src={url}
@@ -61,15 +83,19 @@ export const Modal: FC<ModalProps> = ({ isOpen, onClose, url }) => {
             />
           </div>
           <button
+            disabled={isMinting}
             type="submit"
-            className="active:scale-95 hover:bg-opacity-80 text-xl px-4 py-2 bg-blue-500 text-white rounded">
-            Mint
+            className="disabled:opacity-50 enabled:active:scale-95 enabled:hover:bg-opacity-80 text-xl px-4 py-2 bg-blue-500 text-white rounded">
+            {isMinting ? "Minting..." : "Mint"}
           </button>
-          <button
-            className="active:scale-95 hover:opacity-80 px-4 py-2 bg-red-500 text-white rounded ml-2"
-            onClick={onClose}>
-            Close
-          </button>
+          {/* *** {CHANGE 1 TO IS MINTING BEFORE PUSH}*** */}
+          {1 && (
+            <button
+              className="active:scale-95 hover:opacity-80 px-4 py-2 bg-red-500 text-white rounded ml-2"
+              onClick={onClose}>
+              Close
+            </button>
+          )}
         </form>
       </div>
     </div>

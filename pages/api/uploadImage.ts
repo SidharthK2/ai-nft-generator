@@ -10,10 +10,13 @@ const uploadToPinata = async (sourceUrl: string) => {
   axiosRetry(axiosInstance, { retries: 5 });
   const data = new FormData();
 
-  const response: AxiosResponse = await axiosInstance(sourceUrl, {
-    method: "GET",
-    responseType: "stream",
-  });
+  const response: AxiosResponse = await axiosInstance(
+    sourceUrl.replace(/['"]+/g, ""),
+    {
+      method: "GET",
+      responseType: "stream",
+    }
+  );
   data.append(`file`, response.data);
 
   try {
@@ -30,6 +33,7 @@ const uploadToPinata = async (sourceUrl: string) => {
       }
     );
     console.log(res.data);
+    return res.data;
   } catch (error) {
     console.log(error);
   }

@@ -20,7 +20,7 @@ export default async function handler(
     const response = await openai.createImage({
       prompt,
       size: "256x256",
-      n: 3,
+      n: 1,
     });
 
     return res.status(200).json(response.data.data);

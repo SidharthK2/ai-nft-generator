@@ -81,10 +81,10 @@ export const ImageGenerationSection = () => {
               art style, etc
             </p>
 
-            <p>
+            {/* <p>
               Ex- "A happy cat chilling on a sunny tropical island in cartoon
               NFT style"
-            </p>
+            </p> */}
           </div>
         </div>
         <div className="flex items-center justify-center">

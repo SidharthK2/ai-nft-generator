@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+const JWT = `Bearer ${process.env.PINATA_JWT}`;
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,11 +11,11 @@ export default async function handler(
     url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer PINATA JWT",
+      Authorization: JWT,
     },
     data: JSON.stringify(req.body),
   };
   const response: AxiosResponse = await axios(config);
-  console.log(response.data);
-  res.status(200).json(response);
+  console.log("mtdta res from server: ", response.data);
+  res.status(200).json(response.data);
 }
