@@ -1,23 +1,23 @@
-import axios from "axios";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 import axiosRetry from "axios-retry";
 import FormData from "form-data";
 import { NextApiRequest, NextApiResponse } from "next";
 const JWT = `Bearer ${process.env.PINATA_JWT}`;
 
 const uploadToPinata = async (sourceUrl: string) => {
-  const axiosInstance = axios.create();
+  const axiosInstance: AxiosInstance = axios.create();
 
   axiosRetry(axiosInstance, { retries: 5 });
   const data = new FormData();
 
-  const response = await axiosInstance(sourceUrl, {
+  const response: AxiosResponse = await axiosInstance(sourceUrl, {
     method: "GET",
     responseType: "stream",
   });
   data.append(`file`, response.data);
 
   try {
-    const res = await axios.post(
+    const res: AxiosResponse = await axios.post(
       "https://api.pinata.cloud/pinning/pinFileToIPFS",
       data,
       {
