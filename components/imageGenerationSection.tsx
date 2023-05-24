@@ -1,13 +1,14 @@
 import React, { ReactNode, useState } from "react";
-import Image from "next/image";
 import { Modal } from "./modal";
+import { useAccount } from "wagmi";
 
 export const ImageGenerationSection = () => {
   const [loading, setLoading] = useState(false);
   const [prompt, setPrompt] = useState("");
   const [images, setImages] = useState<any>();
-  const [selectedImage, setSelectedImage] = useState<any>();
+  const [selectedImage, setSelectedImage] = useState<string>("");
   const [modalOpen, setModalOpen] = useState(false);
+  const { isConnected } = useAccount();
 
   const generateImages = async () => {
     if (!prompt) {
@@ -74,14 +75,31 @@ export const ImageGenerationSection = () => {
             type="text"
             placeholder="A Bored Ape playing bass on Moon"
           />
-          <div>Try to make the prompts as descriptive as possible</div>
+          <div className="p-2">
+            <p className="p-1">
+              Hint: Try to be descriptive and include stuff like the background,
+              art style, etc
+            </p>
+
+            <p>
+              Ex- "A happy cat chilling on a sunny tropical island in cartoon
+              NFT style"
+            </p>
+          </div>
         </div>
         <div className="flex items-center justify-center">
           <button
-            disabled={loading}
-            className="disabled:opacity-90 disabled:bg-inherit bg-blue-500 hover:bg-blue-700 text-white font-bold text-2xl py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            disabled={loading || !isConnected}
+            className="group disabled:bg-blue-300 disabled:hover:bg-blue-300 bg-blue-500 hover:bg-blue-700 text-white font-bold text-2xl py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit">
             {loading ? "Loading..." : "Generate!"}
+            <span
+              className="group-hover:opacity-80 transition-opacity bg-slate-700 px-1  text-gray-100 rounded-md absolute left-1/2 
+    -translate-x-1/2 translate-y-full opacity-0 m-4 mx-auto">
+              {isConnected
+                ? "get images"
+                : "Connect your wallet to generate images"}
+            </span>
           </button>
         </div>
       </form>
@@ -97,7 +115,7 @@ export const ImageGenerationSection = () => {
               </div>
             );
           })}
-          <Modal isOpen={modalOpen} onClose={closeModal} />
+          <Modal isOpen={modalOpen} onClose={closeModal} url={selectedImage} />
         </div>
       ) : (
         <></>
