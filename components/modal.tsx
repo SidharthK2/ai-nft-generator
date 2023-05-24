@@ -80,7 +80,7 @@ export const Modal: FC<ModalProps> = ({ isOpen, onClose, url }) => {
         isOpen ? "visible" : "invisible"
       }`}>
       <div className="space-y-2 outline-2 outline bg-gradient-to-r from-sky-400 to-cyan-300 p-6 rounded shadow-lg">
-        <h2 className="text-3xl mb-4">Let's Mint!</h2>
+        <h2 className="text-3xl mb-4">Lets Mint!</h2>
         <img
           className="rounded-lg outline outline-2"
           src={url}
