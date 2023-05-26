@@ -1,29 +1,57 @@
-This is a [RainbowKit](https://rainbowkit.com) + [wagmi](https://wagmi.sh) + [Next.js](https://nextjs.org/) project bootstrapped with [`create-rainbowkit`](https://github.com/rainbow-me/rainbowkit/tree/main/packages/create-rainbowkit).
+# DALL-E NFTs
 
-## Getting Started
+This app allows anyone with a crypto wallet to generate custom NFT based on text prompts and mint them on Ethereum Mainnet or Goerli testnet.
 
-First, run the development server:
+## Screenshots
+
+![App Screenshot1](/public/assets/nft-screenshot1.png)
+
+![App Screenshot2](/public/assets/nft-screenshot2.png)
+
+![App Screenshot3](/public/assets/nft-screenshot3.png)
+
+## Demo
+
+Check out the live demo at https://dalle-nfts.vercel.app/
+
+## Run Locally
+
+Clone the project
 
 ```bash
-npm run dev
+  git clone https://github.com/SidharthK2/ai-nft-generator.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Go to the project directory
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```bash
+  cd ai-nft-generator
+```
 
-## Learn More
+Install dependencies
 
-To learn more about this stack, take a look at the following resources:
+```bash
+  yarn
+```
 
-- [RainbowKit Documentation](https://rainbowkit.com) - Learn how to customize your wallet connection flow.
-- [wagmi Documentation](https://wagmi.sh) - Learn how to interact with Ethereum.
-- [Next.js Documentation](https://nextjs.org/docs) - Learn how to build a Next.js application.
+Start the server
 
-You can check out [the RainbowKit GitHub repository](https://github.com/rainbow-me/rainbowkit) - your feedback and contributions are welcome!
+```bash
+  yarn dev
+```
 
-## Deploy on Vercel
+## Environment Variables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+To run this project, you will need to add the following environment variables to your .env.local file
 
-Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+`OPENAI_API_KEY`="your key"
+
+`PINATA_API_KEY`="your key"
+
+`PINATA_JWT`="your key"
+
+`NEXT_PUBLIC_ALCHEMY_API_KEY`="your key"
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
