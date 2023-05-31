@@ -15,6 +15,7 @@ interface ModalProps {
   onClose: () => void;
   url: string;
 }
+//FIX MINT BTN AND CLOSE AND MINTING status
 
 export const Modal: FC<ModalProps> = ({ isOpen, onClose, url }) => {
   const [name, setName] = useState("");
@@ -113,15 +114,16 @@ export const Modal: FC<ModalProps> = ({ isOpen, onClose, url }) => {
             disabled={isMinting || !write}
             type="submit"
             className="disabled:opacity-50 enabled:active:scale-95 enabled:hover:bg-opacity-80 text-xl px-4 py-2 bg-blue-500 text-white rounded">
-            {isMinting ? "Minting..." : "Mint"}
+            {isMinting || !isSuccess ? "Minting..." : "Mint"}
           </button>
-          {!isMinting && (
-            <button
-              className="active:scale-95 hover:opacity-80 px-4 py-2 bg-red-500 text-white rounded ml-2"
-              onClick={onClose}>
-              Close
-            </button>
-          )}
+          {!isMinting ||
+            (!isSuccess && (
+              <button
+                className="active:scale-95 hover:opacity-80 px-4 py-2 bg-red-500 text-white rounded ml-2"
+                onClick={onClose}>
+                Close
+              </button>
+            ))}
         </form>
       </div>
     </div>
